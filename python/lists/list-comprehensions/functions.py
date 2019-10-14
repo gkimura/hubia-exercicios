@@ -1,3 +1,4 @@
+import string 
 
 def zip(list1, list2):
 	print ([(list1[i], list2[i]) for i in range(len(list1))])
@@ -30,5 +31,29 @@ def generalized_parse_csv(file_name, d, c):
 	lines = f.readlines()
 	print ([[line[:-1].split(d)] for line in lines if line[0]!=c])
 
+def swap(word,i):
+	w = list(word)
+	w[i],w[i+1] = w[i+1],w[i]
+	return ''.join(w)
+
 def mutate(word):
+	letters = string.ascii_lowercase
+	# insert character
+	mutations = [''.join([word[:i],l,word[i:len(word)]]) for i in range(len(word)) for l in letters]
+	# delete character
+	mutations.extend([''.join([word[:i],word[i+1:len(word)]]) for i in range(len(word))])
+	# replace character
+	mutations.extend([''.join([word[:i],l,word[i+1:len(word)]]) for i in range(len(word)) for l in letters])
+	# swap 2 consecutive characters
+	mutations.extend([swap(word,i) for i in range(len(word)-1)])
+	return mutations
+
+def nearly_equal(str1, str2):
+	mutations = mutate(str2)
+	if str1 in mutations:
+		return True
+	else:
+		return False
+		
 	
+
